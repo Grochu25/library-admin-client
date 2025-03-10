@@ -1,0 +1,29 @@
+vaadin:
+  launch-browser: true
+gg:
+  jte:
+    development-mode: true
+spring:
+  application:
+    name: library-admin-client
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+      client:
+        registration:
+          library-admin-client:
+            provider: libraryprov
+            client-id: library-admin-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8000/login/oauth2/code/{registrationId}"
+            scope: adminStuff,openid
+        provider:
+          libraryprov:
+            issuer-uri: http://localhost:9000
+
+server:
+  port: 8000

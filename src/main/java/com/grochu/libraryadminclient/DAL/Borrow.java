@@ -11,8 +11,4 @@ public class Borrow
 	private User user;
 	private LocalDate since;
 	private LocalDate until;
-
-	private void borrow() {
-		since = LocalDate.now();
-	}
 }

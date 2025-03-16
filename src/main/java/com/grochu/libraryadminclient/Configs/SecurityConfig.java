@@ -2,15 +2,15 @@ package com.grochu.libraryadminclient.Configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -20,13 +20,14 @@ public class SecurityConfig
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf( csrf -> csrf.disable() )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/login/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/error/**").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .anyRequest().hasAnyAuthority("SCOPE_adminStuff"))
                 .oauth2Login((oauth2)->oauth2.loginPage("/oauth2/authorization/library-admin-client"))
+                .logout(logout-> logout.logoutUrl("/oauth2/logout"))
                 .oauth2Client(Customizer.withDefaults())
                 .build();
     }
@@ -36,4 +37,5 @@ public class SecurityConfig
     {
         return new BCryptPasswordEncoder();
     }
+
 }

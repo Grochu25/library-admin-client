@@ -2,10 +2,14 @@ package com.grochu.libraryadminclient.Interfaces;
 
 import com.grochu.libraryadminclient.DAL.Book;
 
+import java.util.List;
+
 public interface BookService
 {
-    Iterable<Book> findAll();
-    Book findById(int id);
+    List<Book> findAll();
+    List<Book> findPage(int page);
+    List<Book> findBookAndPage(String searchPhrase, int page);
+    Book findById(long id);
     Book addBook(Book book);
-    Integer getAllBooksNumber();
+    Integer getAllMatchingBooksNumber(String searchPhrase);
 }

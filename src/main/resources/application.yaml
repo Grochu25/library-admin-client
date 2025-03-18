@@ -11,7 +11,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          jwk-set-uri: http://${AUTH_HOSTNAME}:${AUTH_PORT}/oauth2/jwks
       client:
         registration:
           library-admin-client:
@@ -19,11 +19,11 @@ spring:
             client-id: library-admin-client
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8000/login/oauth2/code/{registrationId}"
+            redirect-uri: http://${ADMIN_HOSTNAME}:${ADMIN_PORT}/login/oauth2/code/{registrationId}
             scope: adminStuff,openid
         provider:
           libraryprov:
-            issuer-uri: http://localhost:9000
+            issuer-uri: http://${AUTH_HOSTNAME}:${AUTH_PORT}
 
 server:
-  port: 8000
+  port: ${ADMIN_PORT}

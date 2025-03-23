@@ -1,4 +1,4 @@
-@import com.grochu.libraryadminclient.DAL.Book
+@import com.grochu.libraryadminclient.Domain.Book
 @import java.util.List
 @param List<Book> books
 @param int page

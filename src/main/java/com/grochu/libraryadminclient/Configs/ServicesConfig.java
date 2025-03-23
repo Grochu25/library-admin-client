@@ -16,7 +16,8 @@ import org.springframework.web.context.annotation.RequestScope;
 @Configuration
 public class ServicesConfig
 {
-    private String getBearerToken(OAuth2AuthorizedClientService oAuth2AuthorizedClientService){
+
+    public String getBearerToken(OAuth2AuthorizedClientService oAuth2AuthorizedClientService){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String token = null;
@@ -32,40 +33,38 @@ public class ServicesConfig
                 token = client.getAccessToken().getTokenValue();
             }
         }
-
         return token;
     }
 
     @Bean
     @RequestScope
-    public BookService bookService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService)
+    public BookService bookService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService, EnvironmentalConfig environmentalConfig)
     {
         String token = getBearerToken(oAuth2AuthorizedClientService);
-        return new RestBookService(token);
+        return new RestBookService(token, environmentalConfig);
     }
 
     @Bean
     @RequestScope
-    public CopyService copyService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService)
+    public CopyService copyService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService, EnvironmentalConfig environmentalConfig)
     {
         String token = getBearerToken(oAuth2AuthorizedClientService);
-        return new RestCopyService(token);
+        return new RestCopyService(token, environmentalConfig);
     }
 
     @Bean
     @RequestScope
-    public AuthorService authorService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService)
+    public AuthorService authorService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService, EnvironmentalConfig environmentalConfig)
     {
         String token = getBearerToken(oAuth2AuthorizedClientService);
-        log.info(token);
-        return new RestAuthorService(token);
+        return new RestAuthorService(token, environmentalConfig);
     }
 
     @Bean
     @RequestScope
-    public CustomerService customerService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService)
+    public CustomerService customerService(OAuth2AuthorizedClientService oAuth2AuthorizedClientService, EnvironmentalConfig environmentalConfig)
     {
         String token = getBearerToken(oAuth2AuthorizedClientService);
-        return new RestCustomerService(token);
+        return new RestCustomerService(token, environmentalConfig);
     }
 }

@@ -1,4 +1,4 @@
-package com.grochu.libraryadminclient.DAL;
+package com.grochu.libraryadminclient.Domain;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-@import com.grochu.libraryadminclient.DAL.Author
+@import com.grochu.libraryadminclient.Domain.Author
 @param Author author = null
 
 @template.layout.main(content = @`

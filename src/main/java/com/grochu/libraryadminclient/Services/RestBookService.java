@@ -1,7 +1,9 @@
 package com.grochu.libraryadminclient.Services;
 
-import com.grochu.libraryadminclient.DAL.Book;
+import com.grochu.libraryadminclient.Configs.EnvironmentalConfig;
+import com.grochu.libraryadminclient.Domain.Book;
 import com.grochu.libraryadminclient.Interfaces.BookService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
@@ -12,17 +14,19 @@ public class RestBookService implements BookService
 {
     private RestClient restClient;
     private String token;
+    private EnvironmentalConfig envConf;
 
-    public RestBookService(String token)
+    public RestBookService(String token, EnvironmentalConfig environmentalConfig)
     {
         restClient = RestClient.create();
         this.token = token;
+        this.envConf = environmentalConfig;
     }
 
     @Override
     public List<Book> findAll() {
         return restClient.get()
-                .uri("http://localhost:8080/api/books/all")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books/all")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -33,7 +37,7 @@ public class RestBookService implements BookService
     @Override
     public List<Book> findPage(int page) {
         return restClient.get()
-                .uri("http://localhost:8080/api/books?page="+page)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books?page="+page)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -44,7 +48,7 @@ public class RestBookService implements BookService
     @Override
     public List<Book> findBookAndPage(String searchPhrase, int page) {
         return restClient.get()
-                .uri("http://localhost:8080/api/books?page="+page+"&search="+searchPhrase)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books?page="+page+"&search="+searchPhrase)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -55,7 +59,7 @@ public class RestBookService implements BookService
     @Override
     public Book findById(long id) {
         return restClient.get()
-                .uri("http://localhost:8080/api/books/"+id)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books/"+id)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -65,7 +69,7 @@ public class RestBookService implements BookService
     @Override
     public Book addBook(Book book) {
         return restClient.post()
-                .uri("http://localhost:8080/api/books")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(book)
@@ -77,9 +81,9 @@ public class RestBookService implements BookService
     public Integer getAllMatchingBooksNumber(String searchPhrase) {
         var query = restClient.get();
         if(searchPhrase == null)
-            query.uri("http://localhost:8080/api/books/number");
+            query.uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books/number");
         else
-            query.uri("http://localhost:8080/api/books/number?search="+searchPhrase);
+            query.uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/books/number?search="+searchPhrase);
         Integer result =query.header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()

@@ -1,7 +1,7 @@
 package com.grochu.libraryadminclient.Controllers;
 
-import com.grochu.libraryadminclient.DAL.Author;
-import com.grochu.libraryadminclient.DAL.Book;
+import com.grochu.libraryadminclient.Domain.Author;
+import com.grochu.libraryadminclient.Domain.Book;
 import com.grochu.libraryadminclient.Interfaces.AuthorService;
 import com.grochu.libraryadminclient.Interfaces.CopyService;
 import lombok.extern.slf4j.Slf4j;

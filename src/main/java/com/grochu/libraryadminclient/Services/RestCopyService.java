@@ -1,9 +1,11 @@
 package com.grochu.libraryadminclient.Services;
 
-import com.grochu.libraryadminclient.DAL.Borrow;
-import com.grochu.libraryadminclient.DAL.Copy;
-import com.grochu.libraryadminclient.DAL.User;
+import com.grochu.libraryadminclient.Configs.EnvironmentalConfig;
+import com.grochu.libraryadminclient.Domain.Borrow;
+import com.grochu.libraryadminclient.Domain.Copy;
+import com.grochu.libraryadminclient.Domain.User;
 import com.grochu.libraryadminclient.Interfaces.CopyService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
@@ -12,20 +14,22 @@ import java.util.List;
 
 public class RestCopyService implements CopyService
 {
-    RestClient restClient;
-    String token;
+    private RestClient restClient;
+    private String token;
+    private EnvironmentalConfig envConf;
 
-    public RestCopyService(String token)
+    public RestCopyService(String token, EnvironmentalConfig envConf)
     {
         restClient = RestClient.create();
         this.token = token;
+        this.envConf = envConf;
     }
 
     @Override
     public List<Copy> findAllCopiesOfBook(long bookId)
     {
         return restClient.get()
-                .uri("http://localhost:8080/api/copies/"+bookId+"/all")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/"+bookId+"/all")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -37,7 +41,7 @@ public class RestCopyService implements CopyService
     public List<Copy> findAvailableCopiesOfBook(long bookId)
     {
         return restClient.get()
-                .uri("http://localhost:8080/api/copies/"+bookId+"/available")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/"+bookId+"/available")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -49,7 +53,7 @@ public class RestCopyService implements CopyService
     public List<Copy> findDestroyedCopiesOfBook(long bookId)
     {
         return restClient.get()
-                .uri("http://localhost:8080/api/copies/"+bookId+"/destroyed")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/"+bookId+"/destroyed")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -60,7 +64,7 @@ public class RestCopyService implements CopyService
     @Override
     public Copy findById(long id) {
         return restClient.get()
-                .uri("http://localhost:8080/api/copies/"+id)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/"+id)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(Copy.class);
@@ -70,7 +74,7 @@ public class RestCopyService implements CopyService
     public Copy addCopy(Copy copy)
     {
         return restClient.post()
-                .uri("http://localhost:8080/api/copies")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(copy)
@@ -81,7 +85,7 @@ public class RestCopyService implements CopyService
     @Override
     public Borrow actualBorrowOfCopy(long id) {
         return restClient.get()
-                .uri("http://localhost:8080/api/borrows/copy/"+id)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/borrows/copy/"+id)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -92,7 +96,7 @@ public class RestCopyService implements CopyService
     public void deleteCopy(long copyId)
     {
         restClient.delete()
-                .uri("http://localhost:8080/api/copies?copyId="+copyId)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies?copyId="+copyId)
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .toBodilessEntity();
@@ -101,7 +105,7 @@ public class RestCopyService implements CopyService
     @Override
     public Borrow returnCopyNow(Copy copy) {
         return restClient.post()
-                .uri("http://localhost:8080/api/copies/return")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/return")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(copy)
@@ -115,7 +119,7 @@ public class RestCopyService implements CopyService
         borrow.setUser(user);
         borrow.setCopy(copy);
         return restClient.post()
-                .uri("http://localhost:8080/api/copies/borrow")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/copies/borrow")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(borrow)

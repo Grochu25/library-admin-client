@@ -1,8 +1,10 @@
 package com.grochu.libraryadminclient.Services;
 
-import com.grochu.libraryadminclient.DAL.Borrow;
-import com.grochu.libraryadminclient.DAL.User;
+import com.grochu.libraryadminclient.Configs.EnvironmentalConfig;
+import com.grochu.libraryadminclient.Domain.Borrow;
+import com.grochu.libraryadminclient.Domain.User;
 import com.grochu.libraryadminclient.Interfaces.CustomerService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
@@ -13,17 +15,19 @@ public class RestCustomerService implements CustomerService
 {
     private RestClient restClient;
     private String token;
+    private EnvironmentalConfig envConf;
 
-    public RestCustomerService(String token)
+    public RestCustomerService(String token, EnvironmentalConfig envConf)
     {
         restClient = RestClient.create();
         this.token = token;
+        this.envConf = envConf;
     }
 
     @Override
     public List<User> getPage(int page) {
         return restClient.get()
-                .uri("http://localhost:8080/api/users?page="+page)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users?page="+page)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -33,7 +37,7 @@ public class RestCustomerService implements CustomerService
     @Override
     public List<User> findCustomerAndPage(String searchPhrase, int page) {
         return restClient.get()
-                .uri("http://localhost:8080/api/users?page="+page+"&search="+searchPhrase)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users?page="+page+"&search="+searchPhrase)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -43,7 +47,7 @@ public class RestCustomerService implements CustomerService
     @Override
     public User getCustomerById(long id) {
         return restClient.get()
-                .uri("http://localhost:8080/api/users/"+id)
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users/"+id)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -53,7 +57,7 @@ public class RestCustomerService implements CustomerService
     @Override
     public List<Borrow> getBorrowedCopiesForUser(long userId) {
         return restClient.get()
-                .uri("http://localhost:8080/api/users/"+userId+"/borrows/all")
+                .uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users/"+userId+"/borrows/all")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -64,9 +68,9 @@ public class RestCustomerService implements CustomerService
     public Integer getAllMatchingCustomersNumber(String searchPhrase) {
         var query = restClient.get();
         if(searchPhrase == null)
-            query.uri("http://localhost:8080/api/users/number");
+            query.uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users/number");
         else
-            query.uri("http://localhost:8080/api/users/number?search="+searchPhrase);
+            query.uri("http://"+envConf.getResourceHostname()+":"+envConf.getResourcePort()+"/api/users/number?search="+searchPhrase);
         Integer result =query.header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()

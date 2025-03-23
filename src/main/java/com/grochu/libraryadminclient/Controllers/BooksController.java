@@ -1,9 +1,9 @@
 package com.grochu.libraryadminclient.Controllers;
 
-import com.grochu.libraryadminclient.DAL.Author;
-import com.grochu.libraryadminclient.DAL.Book;
-import com.grochu.libraryadminclient.DAL.Borrow;
-import com.grochu.libraryadminclient.DAL.Copy;
+import com.grochu.libraryadminclient.Domain.Author;
+import com.grochu.libraryadminclient.Domain.Book;
+import com.grochu.libraryadminclient.Domain.Borrow;
+import com.grochu.libraryadminclient.Domain.Copy;
 import com.grochu.libraryadminclient.DTO.AddBookAndAuthorDTO;
 import com.grochu.libraryadminclient.DTO.AddBookDTO;
 import com.grochu.libraryadminclient.Interfaces.AuthorService;

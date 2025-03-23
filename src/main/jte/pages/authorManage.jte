@@ -1,5 +1,5 @@
-@import com.grochu.libraryadminclient.DAL.Author
-@import com.grochu.libraryadminclient.DAL.Book
+@import com.grochu.libraryadminclient.Domain.Author
+@import com.grochu.libraryadminclient.Domain.Book
 @import java.util.Map
 @param Author author
 @param Map<Book, int[]> books

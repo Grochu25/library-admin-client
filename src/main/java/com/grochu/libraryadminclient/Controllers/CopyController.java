@@ -1,10 +1,9 @@
 package com.grochu.libraryadminclient.Controllers;
 
-import com.grochu.libraryadminclient.DAL.Copy;
+import com.grochu.libraryadminclient.Domain.Copy;
 import com.grochu.libraryadminclient.Interfaces.BookService;
 import com.grochu.libraryadminclient.Interfaces.CopyService;
 import com.grochu.libraryadminclient.Interfaces.CustomerService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

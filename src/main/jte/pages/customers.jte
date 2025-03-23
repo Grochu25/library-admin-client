@@ -1,4 +1,4 @@
-@import com.grochu.libraryadminclient.DAL.User
+@import com.grochu.libraryadminclient.Domain.User
 @import java.util.List
 @param List<User> users
 @param int page

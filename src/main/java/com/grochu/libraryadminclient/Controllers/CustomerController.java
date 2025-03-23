@@ -1,7 +1,7 @@
 package com.grochu.libraryadminclient.Controllers;
 
-import com.grochu.libraryadminclient.DAL.Borrow;
-import com.grochu.libraryadminclient.DAL.User;
+import com.grochu.libraryadminclient.Domain.Borrow;
+import com.grochu.libraryadminclient.Domain.User;
 import com.grochu.libraryadminclient.Interfaces.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

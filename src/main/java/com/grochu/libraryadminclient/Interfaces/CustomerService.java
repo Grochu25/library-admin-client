@@ -1,8 +1,7 @@
 package com.grochu.libraryadminclient.Interfaces;
 
-import com.grochu.libraryadminclient.DAL.Borrow;
-import com.grochu.libraryadminclient.DAL.Copy;
-import com.grochu.libraryadminclient.DAL.User;
+import com.grochu.libraryadminclient.Domain.Borrow;
+import com.grochu.libraryadminclient.Domain.User;
 
 import java.util.List;
 

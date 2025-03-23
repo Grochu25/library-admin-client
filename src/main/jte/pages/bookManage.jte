@@ -1,6 +1,6 @@
-@import com.grochu.libraryadminclient.DAL.Borrow
-@import com.grochu.libraryadminclient.DAL.Copy
-@import com.grochu.libraryadminclient.DAL.Book
+@import com.grochu.libraryadminclient.Domain.Borrow
+@import com.grochu.libraryadminclient.Domain.Copy
+@import com.grochu.libraryadminclient.Domain.Book
 @import java.util.Map
 @param Book book
 @param Map<Copy, Boolean> copies

@@ -1,0 +1,73 @@
+version: '3'
+services:
+
+  LibraryMysql:
+    image: grochu25/library-mysql
+    container_name: LibraryMysql
+    ports:
+      - 3306:3306
+    networks:
+      - spring-network
+
+  LibraryAuthServer:
+    image: grochu25/library-auth-server
+    container_name: LibraryAuthServer
+    ports:
+      - 9000:9000
+    environment:
+      MYSQL_HOSTNAME: LibraryMysql
+      MYSQL_PORT: 3306
+      ADMIN_HOSTNAME: 127.0.0.1
+      ADMIN_PORT: 8000
+      AUTH_PORT: 9000
+    networks:
+      - spring-network
+    links:
+      - LibraryMysql
+    depends_on:
+      -  LibraryMysql
+  
+  LibraryResourceServer:
+    image: grochu25/library-resource-server
+    container_name: LibraryResourceServer
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOSTNAME: LibraryMysql
+      MYSQL_PORT: 3306
+      AUTH_HOSTNAME: LibraryAuthServer
+      AUTH_PORT: 9000
+      RESOURCE_PORT: 8080
+    networks:
+      - spring-network
+    links:
+      - LibraryMysql
+      - LibraryAuthServer
+    depends_on:
+      -  LibraryMysql
+      -  LibraryAuthServer
+  
+  LibraryAdminClient:
+    image: grochu25/library-admin-client:latest
+    container_name: LibraryAdminClient
+    ports:
+      - 8000:8000
+    environment:
+      AUTH_HOSTNAME: LibraryAuthServer
+      AUTH_PORT: 9000
+      RESOURCE_HOSTNAME: LibraryResourceServer
+      RESOURCE_PORT: 8080
+      ADMIN_HOSTNAME: 127.0.0.1
+      ADMIN_PORT: 8000
+    networks:
+      - spring-network
+    links:
+      - LibraryAuthServer
+      - LibraryResourceServer
+    depends_on:
+      -  LibraryAuthServer
+      -  LibraryResourceServer
+
+
+networks:
+  spring-network: {}
